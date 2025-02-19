@@ -22,6 +22,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setJMenuBar(mainMenu.getMenuBar()); 
         add(new ConfigurationPanel(), BorderLayout.NORTH); 
+        add(new BSTPanel(), BorderLayout.SOUTH);
         setVisible(true);
     }
 }

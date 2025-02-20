@@ -28,6 +28,7 @@ public class ConfigurationPanel extends JPanel {
 
     private JLabel errorLabel;
     private JTextField textField;
+    private JTextField resultField;
 
     public ConfigurationPanel() {
         setLayout(new BorderLayout());
@@ -35,7 +36,8 @@ public class ConfigurationPanel extends JPanel {
         setBorder(createTitledBorder());
 
         // Tạo UI
-        add(createInputPanel(), BorderLayout.CENTER);
+        add(createInputPanel(), BorderLayout.NORTH);
+        add(createResultPanel(), BorderLayout.CENTER);
         add(createErrorPanel(), BorderLayout.SOUTH);
     }
 
@@ -60,10 +62,10 @@ public class ConfigurationPanel extends JPanel {
         JButton randomButton = createButton("Random", new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleAction(new Consumer<Integer>() {
+                handleAction(new Runnable() {
                     @Override
-                    public void accept(Integer data) {
-                        handleRandomNode(data);
+                    public void run() {
+                        handleRandomNode();
                     }
                 });
             }
@@ -98,6 +100,15 @@ public class ConfigurationPanel extends JPanel {
         panel.add(searchButton);
         panel.add(removeButton);
 
+        return panel;
+    }
+    
+    private JPanel createResultPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        resultField = new JTextField(20);
+        resultField.setSize(200, 30);
+        resultField.setFont(new Font("Arial", Font.PLAIN, 14));
+        panel.add(resultField);
         return panel;
     }
 
@@ -145,6 +156,10 @@ public class ConfigurationPanel extends JPanel {
         }
     }
 
+    private void handleAction(Runnable action) {
+        action.run();
+    }
+
     private int validInput() {
         String input = textField.getText().trim();
         String regex = "[0-9]+";
@@ -181,8 +196,8 @@ public class ConfigurationPanel extends JPanel {
         System.out.println("Adding node: " + data);
     }
 
-    private void handleRandomNode(int data) {
-        System.out.println("Random node: " + data);
+    private void handleRandomNode() {
+        System.out.println("Random node: ");
     }
 
     private void handleSearchNode(int data) {

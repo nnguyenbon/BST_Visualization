@@ -17,7 +17,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         BSTTree bstTree = new BSTTree();
-        BSTPanel bstPanel = new BSTPanel();
+        BSTPanel bstPanel = new BSTPanel(bstTree);
         setTitle("BST Visualizer");
         setSize(BstVisualization.WINDOW_SIZE_X, BstVisualization.WINDOW_SIZE_Y);
         setLocationRelativeTo(null);

@@ -197,8 +197,8 @@ public class ConfigurationPanel extends JPanel {
     }
 
     private void handleAddNode(int data) {
-        bstTree.createNode(data);
-        bstPanel.drawCircle(data);
+        BSTNode node = bstTree.createNode(data);
+        bstPanel.drawCircle(node);
         System.out.println("Adding node: " + data);
     }
 

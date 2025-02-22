@@ -21,14 +21,18 @@ import javax.swing.JPanel;
  * @author CE191239 Nguyen Kim Bao Nguyen
  */
 public class BSTPanel extends JPanel {
+    private BSTTree bstTree;
     private final List<Circle> circles = new ArrayList<>();
+    private static final int NODE_SPACING_X = 80;
+    private static final int NODE_SPACING_Y = 100;
 
-    public BSTPanel() {
+    public BSTPanel(BSTTree bstTree) {
+        this.bstTree = bstTree;
         setPreferredSize(new Dimension(1000, 500));
     }
 
-    public void drawCircle(int data) {
-        circles.add(new Circle(500, 250, 50, Color.white, data + ""));
+    public void drawCircle(BSTNode node) {
+        circles.add(new Circle(node, 500, 250, 50, Color.white));
         repaint();
     }
 
@@ -54,19 +58,47 @@ public class BSTPanel extends JPanel {
         g2d.dispose();
     }
 
+    // private void calculatePositions() {
+    // int treeHeight = bstTree.getHeight(bstTree.root);
+    // int canvasWidth = getWidth();
+
+    // // Tính toán vị trí theo thuật toán Reingold-Tilford
+    // calculateNodePositions(bstTree.root, 0, canvasWidth, 0, canvasWidth,
+    // treeHeight);
+    // }
+
+    // private void calculateNodePositions(BSTNode node, int minX, int maxX, int
+    // level, int parentX, int treeHeight) {
+    // if (node == null)
+    // return;
+
+    // // Tính toán vị trí x
+    // int x = (minX + maxX) / 2;
+    // // Tính toán vị trí y dựa trên level
+    // int y = (level + 1) * NODE_SPACING_Y;
+
+    // node.circle = new Circle(node, x, y, 50, Color.white);
+
+    // // Đệ quy cho node con
+    // calculateNodePositions(node.left, minX, x, level + 1, x, treeHeight);
+    // calculateNodePositions(node.right, x, maxX, level + 1, x, treeHeight);
+    // }
+
     class Circle {
         int x;
         int y;
         final int size;
         Color color;
-        final String text;
+        BSTNode bstNode;
+        String text;
 
-        public Circle(int x, int y, int size, Color color, String text) {
+        public Circle(BSTNode node, int x, int y, int size, Color color) {
+            this.bstNode = node;
             this.x = x;
             this.y = y;
             this.size = size;
             this.color = color;
-            this.text = text;
+            text = node.data + "";
         }
 
         public boolean contains(Point p) {

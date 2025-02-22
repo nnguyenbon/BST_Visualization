@@ -16,13 +16,15 @@ public class MainFrame extends JFrame {
     MainMenuBar mainMenu = new MainMenuBar();
 
     public MainFrame() {
+        BSTTree bstTree = new BSTTree();
+        BSTPanel bstPanel = new BSTPanel();
         setTitle("BST Visualizer");
         setSize(BstVisualization.WINDOW_SIZE_X, BstVisualization.WINDOW_SIZE_Y);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setJMenuBar(mainMenu.getMenuBar());
-        add(new ConfigurationPanel(), BorderLayout.NORTH);
-        add(new BSTPanel(), BorderLayout.SOUTH);
+        add(new ConfigurationPanel(bstTree, bstPanel), BorderLayout.NORTH);
+        add(bstPanel, BorderLayout.SOUTH);
         setVisible(true);
     }
 }

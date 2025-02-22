@@ -29,8 +29,12 @@ public class ConfigurationPanel extends JPanel {
     private JLabel errorLabel;
     private JTextField textField;
     private JTextField resultField;
+    private BSTPanel bstPanel;
+    private BSTTree bstTree;
 
-    public ConfigurationPanel() {
+    public ConfigurationPanel(BSTTree bstTree, BSTPanel bstPanel) {
+        this.bstTree = bstTree;
+        this.bstPanel = bstPanel;
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(1000, 200));
         setBorder(createTitledBorder());
@@ -162,7 +166,7 @@ public class ConfigurationPanel extends JPanel {
 
     private int validInput() {
         String input = textField.getText().trim();
-        String regex = "[0-9]+";
+        String regex = "-?[0-9]+";
 
         if (input.isEmpty()) {
             showError("Input is empty!");
@@ -193,19 +197,29 @@ public class ConfigurationPanel extends JPanel {
     }
 
     private void handleAddNode(int data) {
+        bstTree.createNode(data);
+        bstPanel.drawCircle(data);
         System.out.println("Adding node: " + data);
     }
 
     private void handleRandomNode() {
-        System.out.println("Random node: ");
-
+        int data = bstTree.randomNode();
+        System.out.println("Random node: " + data);
+        textField.setText(data + "");
     }
 
     private void handleSearchNode(int data) {
+        Boolean found = true;
+        if (bstTree.search(bstTree.root, data) == null) {
+            found = false;
+        }
+        bstPanel.highlightCircle(data, found);
         System.out.println("Searching node: " + data);
     }
 
     private void handleRemoveNode(int data) {
+        bstTree.delete(bstTree.root, data);
+        bstPanel.removeCircle(data);
         System.out.println("Removing node: " + data);
     }
 }

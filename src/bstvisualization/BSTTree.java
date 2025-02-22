@@ -17,20 +17,23 @@ public class BSTTree {
 
     public BSTNode createNode(int data) {
         if (root == null) {
+            root = new BSTNode();
+            root.level = 0;
             root.data = data;
             return root;
         }
         BSTNode newNode = new BSTNode();
         newNode.data = data;
-        return insert(newNode, data);
+        int level = 1;
+        return insert(newNode, data, level);
     }
 
     // Dung de quy them vao mot nut
-    private BSTNode insert(BSTNode node, int data) {
+    private BSTNode insert(BSTNode node, int data, int level) {
         if (data < node.data) {
-            node.left = insert(node.left, data);
+            node.left = insert(node.left, data, level++);
         } else if (data > node.data) {
-            node.right = insert(node.right, data);
+            node.right = insert(node.right, data, level++);
         } else {
             node.count++;
         }
@@ -81,8 +84,7 @@ public class BSTTree {
         return current;
     }
 
-    public BSTNode randomNode() {
-        int data = (int) (Math.random() * 201) - 100;
-        return createNode(data);
+    public int randomNode() {
+        return (int) (Math.random() * 101);
     }
 }

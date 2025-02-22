@@ -17,11 +17,11 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         setTitle("BST Visualizer");
-        setSize(BstVisualization.WINDOW_SIZE_X, BstVisualization.WINDOW_SIZE_Y);  
-        setLocationRelativeTo(null);  
+        setSize(BstVisualization.WINDOW_SIZE_X, BstVisualization.WINDOW_SIZE_Y);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setJMenuBar(mainMenu.getMenuBar()); 
-        add(new ConfigurationPanel(), BorderLayout.NORTH); 
+        setJMenuBar(mainMenu.getMenuBar());
+        add(new ConfigurationPanel(), BorderLayout.NORTH);
         add(new BSTPanel(), BorderLayout.SOUTH);
         setVisible(true);
     }

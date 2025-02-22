@@ -14,7 +14,7 @@ public class BSTNode {
     BSTNode left;
     BSTNode right;
     BSTNode parent;
-    
+
     public BSTNode() {
     }
 
@@ -129,8 +129,8 @@ public class BSTNode {
         return current;
     }
 
-    //A node's successor is the node with a greater value than it immediately 
-    //after it in the Inorder Traversal (LNR: Left - Node - Right) order.
+    // A node's successor is the node with a greater value than it immediately
+    // after it in the Inorder Traversal (LNR: Left - Node - Right) order.
     public BSTNode getSuccessor() {
         if (this.right != null) {
             return this.right.findMin();
@@ -138,7 +138,7 @@ public class BSTNode {
 
         BSTNode current = this;
 
-        //Check if parent is not null and current node is in the right of parent
+        // Check if parent is not null and current node is in the right of parent
         while (this.parent != null && current == current.parent.right) {
             current = current.parent;
         }
@@ -153,7 +153,7 @@ public class BSTNode {
 
         BSTNode current = this;
 
-        //Check if parent is not null and current node is in the left of parent
+        // Check if parent is not null and current node is in the left of parent
         while (this.parent != null && current == current.parent.left) {
             current = current.parent;
         }
@@ -161,13 +161,13 @@ public class BSTNode {
         return current.parent;
     }
 
-    //Get height due to node
+    // Get height due to node
     public int getHeight() {
         int leftHeight = (left == null) ? 0 : left.getHeight();
         int rightHeight = (right == null) ? 0 : right.getHeight();
         return Math.max(leftHeight, rightHeight) + 1;
     }
-    
+
     public boolean removeLeafChild(BSTNode node) {
         if (node == null) {
             return false;
@@ -179,7 +179,7 @@ public class BSTNode {
                     return true;
                 }
             }
-             if (this.hasRightChild()) { // check node is right child to remove
+            if (this.hasRightChild()) { // check node is right child to remove
                 if (this.right.data == node.data) {
                     this.setRight(null);
                     return true;

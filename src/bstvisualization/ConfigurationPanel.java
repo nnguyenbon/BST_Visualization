@@ -102,11 +102,11 @@ public class ConfigurationPanel extends JPanel {
 
         return panel;
     }
-    
+
     private JPanel createResultPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         resultField = new JTextField(20);
-        resultField.setSize(200, 30);
+        resultField.setSize(50, 30);
         resultField.setFont(new Font("Arial", Font.PLAIN, 14));
         panel.add(resultField);
         return panel;
@@ -144,11 +144,11 @@ public class ConfigurationPanel extends JPanel {
                 TitledBorder.LEFT,
                 TitledBorder.TOP,
                 new Font("Arial", Font.BOLD, 16),
-                Color.BLUE
-        );
+                Color.BLUE);
     }
 
-    // Consumer<Integer> được dùng để đơn giản hóa việc gọi các hàm xử lý nút (Add Node, Random, Search, Remove)
+    // Consumer<Integer> được dùng để đơn giản hóa việc gọi các hàm xử lý nút (Add
+    // Node, Random, Search, Remove)
     private void handleAction(Consumer<Integer> action) {
         int data = validInput();
         if (data != -1) {
@@ -198,6 +198,7 @@ public class ConfigurationPanel extends JPanel {
 
     private void handleRandomNode() {
         System.out.println("Random node: ");
+
     }
 
     private void handleSearchNode(int data) {

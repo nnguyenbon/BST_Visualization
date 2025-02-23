@@ -20,29 +20,55 @@ public class BSTTree {
     public BSTTree() {
     }
 
+    public static BSTNode insert(BSTNode node, int data) {
+        if (node == null) {
+            return new BSTNode(data);
+        } else {
+            if (data < node.data) {
+                node.left = insert(node.left, data);
+            } else if (data > node.data) {
+                node.right = insert(node.right, data);
+            }
+        }
+        return node;
+    }
+
     public BSTNode createNode(int data) {
         if (root == null) {
             root = new BSTNode();
             root.level = 0;
             root.data = data;
+            root.parent = null;
+            root.index = 0;
+            root.x = 450;
+            root.y = 100;
             return root;
         }
-        BSTNode newNode = new BSTNode();
-        newNode.data = data;
-        return insert(newNode, data, 0);
+        return insert(root, data, 0);
     }
 
     // Dung de quy them vao mot nut
     private BSTNode insert(BSTNode node, int data, int level) {
-        level++;
+        if (node == null) {
+            BSTNode newNode = new BSTNode();
+            newNode.data = data;
+            newNode.level = level;
+            return newNode;
+        }
+
         if (data < node.data) {
-            node.left = insert(node.left, data, level);
+            BSTNode leftChild = insert(node.left, data, level + 1);
+            node.left = leftChild;
+            leftChild.parent = node;
+            leftChild.index = node.index * 2 + 1;
         } else if (data > node.data) {
-            node.right = insert(node.right, data, level);
+            BSTNode rightChild = insert(node.right, data, level + 1);
+            node.right = rightChild;
+            rightChild.parent = node;
+            rightChild.index = node.index * 2 + 2;
         } else {
             node.count++;
         }
-        node.level = level;
         return node;
     }
 
@@ -132,6 +158,7 @@ public class BSTTree {
             if (current.right != null)
                 queue.add(current.right);
         }
+        nodes.remove(0);
         return nodes;
     }
 

@@ -29,8 +29,8 @@ public class ConfigurationPanel extends JPanel {
     private JLabel errorLabel;
     private JTextField textField;
     private JTextField resultField;
-    private BSTPanel bstPanel;
-    private BSTTree bstTree;
+    private final BSTPanel bstPanel;
+    private final BSTTree bstTree;
 
     public ConfigurationPanel(BSTTree bstTree, BSTPanel bstPanel) {
         this.bstTree = bstTree;
@@ -198,7 +198,9 @@ public class ConfigurationPanel extends JPanel {
 
     private void handleAddNode(int data) {
         BSTNode node = bstTree.createNode(data);
-        bstPanel.drawCircle(node);
+        // bstPanel.drawCircle(node);
+        bstPanel.drawTree();
+        bstTree.inOrder(bstTree.root);
         System.out.println("Adding node: " + data);
     }
 

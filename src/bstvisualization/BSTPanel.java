@@ -21,19 +21,46 @@ import javax.swing.JPanel;
  * @author CE191239 Nguyen Kim Bao Nguyen
  */
 public class BSTPanel extends JPanel {
-    private BSTTree bstTree;
+    private final BSTTree bstTree;
     private final List<Circle> circles = new ArrayList<>();
-    private static final int NODE_SPACING_X = 80;
-    private static final int NODE_SPACING_Y = 100;
+    private final List<Line> lines = new ArrayList<>();
+    private final int levelDefault = 5;
 
     public BSTPanel(BSTTree bstTree) {
         this.bstTree = bstTree;
-        setPreferredSize(new Dimension(1000, 500));
+        setPreferredSize(new Dimension(500, 500));
     }
 
-    public void drawCircle(BSTNode node) {
-        circles.add(new Circle(node, 500, 250, 50, Color.white));
+    public void drawTree() {
+        circles.clear(); // Xóa các hình tròn cũ
+        lines.clear();
+
+        List<BSTNode> nodes = bstTree.getNodesInBFSOrder();
+        for (BSTNode node : nodes) {
+            node.x = (node.index % 2 == 0)
+                    ? (int) (node.parent.x + (levelDefault) * (45 / node.level))
+                    : (int) (node.parent.x - (levelDefault) * (45 / node.level));
+            node.y = node.parent.y + 70;
+        }
+        drawRoot();
+        for (BSTNode node : nodes) {
+            drawNode(node);
+        }
         repaint();
+    }
+
+    private void drawRoot() {
+        circles.add(new Circle(450, 100, 50, Color.WHITE, String.valueOf(bstTree.root.data)));
+    }
+
+    private void drawNode(BSTNode node) {
+        if (node == null)
+            return;
+        lines.add(new Line(
+                node.parent.x + 25, node.parent.y + 50, // Điểm cuối của parent (giữa đáy hình tròn)
+                node.x + 25, node.y));// Điểm đầu của node (giữa đỉnh hình tròn
+        // Thêm hình tròn vào danh sách
+        circles.add(new Circle(node.x, node.y, 50, Color.WHITE, String.valueOf(node.data)));
     }
 
     public void highlightCircle(int data, boolean found) {
@@ -54,51 +81,24 @@ public class BSTPanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        lines.forEach(line -> line.draw(g2d));
         circles.forEach(c -> c.draw(g2d));
         g2d.dispose();
     }
-
-    // private void calculatePositions() {
-    // int treeHeight = bstTree.getHeight(bstTree.root);
-    // int canvasWidth = getWidth();
-
-    // // Tính toán vị trí theo thuật toán Reingold-Tilford
-    // calculateNodePositions(bstTree.root, 0, canvasWidth, 0, canvasWidth,
-    // treeHeight);
-    // }
-
-    // private void calculateNodePositions(BSTNode node, int minX, int maxX, int
-    // level, int parentX, int treeHeight) {
-    // if (node == null)
-    // return;
-
-    // // Tính toán vị trí x
-    // int x = (minX + maxX) / 2;
-    // // Tính toán vị trí y dựa trên level
-    // int y = (level + 1) * NODE_SPACING_Y;
-
-    // node.circle = new Circle(node, x, y, 50, Color.white);
-
-    // // Đệ quy cho node con
-    // calculateNodePositions(node.left, minX, x, level + 1, x, treeHeight);
-    // calculateNodePositions(node.right, x, maxX, level + 1, x, treeHeight);
-    // }
 
     class Circle {
         int x;
         int y;
         final int size;
         Color color;
-        BSTNode bstNode;
         String text;
 
-        public Circle(BSTNode node, int x, int y, int size, Color color) {
-            this.bstNode = node;
+        public Circle(int x, int y, int size, Color color, String text) {
             this.x = x;
             this.y = y;
             this.size = size;
             this.color = color;
-            text = node.data + "";
+            this.text = text;
         }
 
         public boolean contains(Point p) {
@@ -125,6 +125,41 @@ public class BSTPanel extends JPanel {
             g2d.drawString(text,
                     x + (size - textWidth) / 2,
                     y + (size - textHeight) / 2 + fm.getAscent());
+        }
+    }
+
+    class Line {
+        int startX, startY, endX, endY;
+
+        public Line(int startX, int startY, int endX, int endY) {
+            this.startX = startX;
+            this.startY = startY;
+            this.endX = endX;
+            this.endY = endY;
+        }
+
+        public void draw(Graphics2D g2d) {
+            g2d.setColor(Color.BLACK);
+            g2d.drawLine(startX, startY, endX, endY);
+
+            // // Tính toán hướng của mũi tên (từ parent đến child)
+            // double angle = Math.atan2(endY - startY, endX - startX);
+            // int arrowLength = 10; // Độ dài mũi tên
+            // int arrowAngle = 30; // Góc mũi tên
+
+            // // Tính toán các điểm của mũi tên
+            // double x1 = endX - arrowLength * Math.cos(angle -
+            // Math.toRadians(arrowAngle));
+            // double y1 = endY - arrowLength * Math.sin(angle -
+            // Math.toRadians(arrowAngle));
+            // double x2 = endX - arrowLength * Math.cos(angle +
+            // Math.toRadians(arrowAngle));
+            // double y2 = endY - arrowLength * Math.sin(angle +
+            // Math.toRadians(arrowAngle));
+
+            // // Vẽ hai cạnh của mũi tên
+            // g2d.drawLine(endX, endY, (int) x1, (int) y1);
+            // g2d.drawLine(endX, endY, (int) x2, (int) y2);
         }
     }
 }

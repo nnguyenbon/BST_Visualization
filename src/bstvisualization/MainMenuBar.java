@@ -25,8 +25,12 @@ public class MainMenuBar implements ActionListener {
     private final JMenuItem preOItem, inOItem, postOItem;
     private final JMenuItem bfsItem, dfsItem;
     private final JMenuItem docsItem, aboutItem;
+    private BSTTree bstTree;
+    private BSTPanel bstPanel;
 
-    public MainMenuBar() {
+    public MainMenuBar(BSTTree bstTree, BSTPanel bstPanel) {
+        this.bstPanel = bstPanel;
+        this.bstTree = bstTree;
         UIManager.put("Menu.font", new Font("Arial", Font.BOLD, 16));
         UIManager.put("MenuItem.font", new Font("Arial", Font.PLAIN, 20));
 
@@ -98,16 +102,31 @@ public class MainMenuBar implements ActionListener {
         } else if (source == clearItem) {
             System.out.println("Clear data...");
         } else if (source == exitItem) {
-            System.exit(0); 
+            System.exit(0);
         } else if (source == preOItem) {
+            bstTree.path.clear();
+            bstTree.preOrder(bstTree.root);
+            bstPanel.drawColor();
             System.out.println("Pre-Order Traversal...");
         } else if (source == inOItem) {
+            bstTree.path.clear();
+            bstTree.inOrder(bstTree.root);
+            bstPanel.drawColor();
             System.out.println("In-Order Traversal...");
         } else if (source == postOItem) {
+            bstTree.path.clear();
+            bstTree.posOrder(bstTree.root);
+            bstPanel.drawColor();
             System.out.println("Post-Order Traversal...");
         } else if (source == bfsItem) {
+            bstTree.path.clear();
+            bstTree.path = bstTree.getNodesInBFSOrder();
+            bstPanel.drawColor();
             System.out.println("BFS Algorithm...");
         } else if (source == dfsItem) {
+            bstTree.path.clear();
+            bstTree.preOrder(bstTree.root);
+            bstPanel.drawColor();
             System.out.println("DFS Algorithm...");
         } else if (source == docsItem) {
             System.out.println("Open Documentation...");

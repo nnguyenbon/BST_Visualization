@@ -7,7 +7,6 @@ package bstvisualization;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 /**
@@ -16,8 +15,10 @@ import java.util.Queue;
  */
 public class BSTTree {
     BSTNode root;
+    ArrayList<BSTNode> path;
 
     public BSTTree() {
+        path = new ArrayList<>();
     }
 
     public static BSTNode insert(BSTNode node, int data) {
@@ -40,8 +41,8 @@ public class BSTTree {
             root.data = data;
             root.parent = null;
             root.index = 0;
-            root.x = 450;
-            root.y = 100;
+            root.x = 473;
+            root.y = 25;
             return root;
         }
         return insert(root, data, 0);
@@ -76,12 +77,14 @@ public class BSTTree {
     public BSTNode search(BSTNode currentNode, int target) {
         if (currentNode == null) {
             return null;
-        } else if (currentNode.data == target) {
+        }
+        path.add(currentNode);
+        if (currentNode.data == target) {
             return currentNode;
         } else if (currentNode.data < target) {
-            return search(currentNode.left, target);
-        } else {
             return search(currentNode.right, target);
+        } else {
+            return search(currentNode.left, target);
         }
     }
 
@@ -89,7 +92,7 @@ public class BSTTree {
         if (currentNode == null) {
             return null;
         }
-
+        path.add(currentNode);
         if (currentNode.data < target) {
             return delete(currentNode.left, target);
         } else if (currentNode.data > target) {
@@ -120,32 +123,36 @@ public class BSTTree {
         return (int) (Math.random() * 101);
     }
 
-    void inOrder(BSTNode root) {
-        if (root == null)
+    void inOrder(BSTNode node) {
+        if (node == null)
             return;
-        inOrder(root.left);
-        System.out.println(root.data);
-        inOrder(root.right);
+
+        inOrder(node.left);
+        path.add(node);
+        System.out.println(node.data);
+        inOrder(node.right);
     }
 
-    void preOrder(BSTNode root) {
-        if (root == null)
+    void preOrder(BSTNode node) {
+        if (node == null)
             return;
-        System.out.println(root.data);
-        inOrder(root.left);
-        inOrder(root.right);
+        path.add(node);
+        System.out.println(node.data);
+        preOrder(node.left);
+        preOrder(node.right);
     }
 
-    void posOrder(BSTNode root) {
-        if (root == null)
+    void posOrder(BSTNode node) {
+        if (node == null)
             return;
-        inOrder(root.left);
-        inOrder(root.right);
-        System.out.println(root.data);
+        posOrder(node.left);
+        posOrder(node.right);
+        path.add(node);
+        System.out.println(node.data);
     }
 
-    public List<BSTNode> getNodesInBFSOrder() {
-        List<BSTNode> nodes = new ArrayList<>();
+    public ArrayList<BSTNode> getNodesInBFSOrder() {
+        ArrayList<BSTNode> nodes = new ArrayList<>();
         Queue<BSTNode> queue = new LinkedList<>();
         if (root != null)
             queue.add(root);
@@ -158,7 +165,6 @@ public class BSTTree {
             if (current.right != null)
                 queue.add(current.right);
         }
-        nodes.remove(0);
         return nodes;
     }
 

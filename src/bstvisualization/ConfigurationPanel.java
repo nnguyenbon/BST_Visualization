@@ -36,7 +36,7 @@ public class ConfigurationPanel extends JPanel {
         this.bstTree = bstTree;
         this.bstPanel = bstPanel;
         setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(1000, 200));
+        setPreferredSize(new Dimension(1000, 150));
         setBorder(createTitledBorder());
 
         // Tạo UI
@@ -198,9 +198,7 @@ public class ConfigurationPanel extends JPanel {
 
     private void handleAddNode(int data) {
         BSTNode node = bstTree.createNode(data);
-        // bstPanel.drawCircle(node);
         bstPanel.drawTree();
-        bstTree.inOrder(bstTree.root);
         System.out.println("Adding node: " + data);
     }
 
@@ -211,16 +209,13 @@ public class ConfigurationPanel extends JPanel {
     }
 
     private void handleSearchNode(int data) {
-        Boolean found = true;
-        if (bstTree.search(bstTree.root, data) == null) {
-            found = false;
-        }
-        bstPanel.highlightCircle(data, found);
+        bstPanel.search(data);
         System.out.println("Searching node: " + data);
     }
 
     private void handleRemoveNode(int data) {
         bstTree.delete(bstTree.root, data);
+        bstTree.root = bstTree.delete(bstTree.root, data);
         bstPanel.removeCircle(data);
         System.out.println("Removing node: " + data);
     }

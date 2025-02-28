@@ -151,14 +151,13 @@ public class MainMenuBar implements ActionListener {
     private void saveFile() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save BST Data");
-        fileChooser.setSelectedFile(new File("bst_data.txt")); // Tên file mặc định
+        fileChooser.setSelectedFile(new File("bst_data.txt"));
 
         int userChoice = fileChooser.showSaveDialog(null);
 
         if (userChoice == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             try (FileWriter writer = new FileWriter(selectedFile)) {
-                // Giả sử BSTTree có phương thức serialize() để chuyển cây thành chuỗi
                 String data = bstTree.serialize();
                 writer.write(data);
                 System.out.println("Đã lưu file thành công: " + selectedFile.getAbsolutePath());
@@ -183,9 +182,7 @@ public class MainMenuBar implements ActionListener {
                     content.append(line);
                 }
 
-                // Giả sử BSTTree có phương thức deserialize() để đọc dữ liệu
                 bstTree.deserialize(content.toString());
-                bstPanel.repaint(); // Vẽ lại cây BST
                 System.out.println("Đã mở file thành công: " + selectedFile.getName());
 
             } catch (FileNotFoundException ex) {

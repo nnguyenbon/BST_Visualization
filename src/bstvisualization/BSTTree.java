@@ -5,6 +5,7 @@
  */
 package bstvisualization;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -13,7 +14,7 @@ import java.util.Queue;
  *
  * @author CE191239 Nguyen Kim Bao Nguyen
  */
-public class BSTTree {
+public class BSTTree implements Serializable {
     BSTNode root;
     ArrayList<BSTNode> path;
 
@@ -119,6 +120,10 @@ public class BSTTree {
         return current;
     }
 
+    public void clearData() {
+        root = null;
+    }
+
     public int randomNode() {
         return (int) (Math.random() * 101);
     }
@@ -173,5 +178,32 @@ public class BSTTree {
         if (node == null)
             return 0;
         return 1 + Math.max(getHeight(node.left), getHeight(node.right));
+    }
+
+    public String serialize() {
+        StringBuilder sb = new StringBuilder();
+        serializeHelper(root, sb);
+        return sb.toString().trim();
+    }
+
+    private void serializeHelper(BSTNode node, StringBuilder sb) {
+        if (node == null)
+            return;
+        sb.append(node.data).append(" ");
+        serializeHelper(node.left, sb);
+        serializeHelper(node.right, sb);
+    }
+
+    public void deserialize(String data) {
+        clearData();
+        String[] values = data.split(" ");
+        for (String value : values) {
+            try {
+                int num = Integer.parseInt(value);
+                this.createNode(num);
+            } catch (NumberFormatException ex) {
+                throw new IllegalArgumentException("Dữ liệu không hợp lệ");
+            }
+        }
     }
 }

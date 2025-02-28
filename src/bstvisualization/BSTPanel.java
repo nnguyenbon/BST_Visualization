@@ -37,6 +37,12 @@ public class BSTPanel extends JPanel {
         setBackground(Color.white);
     }
 
+    public void clearData() {
+        circles.clear();
+        lines.clear();
+        repaint();
+    }
+
     public void drawTree() {
         circles.clear();
         lines.clear();

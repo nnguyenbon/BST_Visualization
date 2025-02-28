@@ -8,9 +8,17 @@ package bstvisualization;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
@@ -96,10 +104,15 @@ public class MainMenuBar implements ActionListener {
         JMenuItem source = (JMenuItem) e.getSource();
 
         if (source == openItem) {
+            openFile();
+            bstPanel.drawTree();
             System.out.println("Open file...");
         } else if (source == saveItem) {
+            saveFile();
             System.out.println("Save file...");
         } else if (source == clearItem) {
+            bstTree.clearData();
+            bstPanel.clearData();
             System.out.println("Clear data...");
         } else if (source == exitItem) {
             System.exit(0);
@@ -132,6 +145,56 @@ public class MainMenuBar implements ActionListener {
             System.out.println("Open Documentation...");
         } else if (source == aboutItem) {
             System.out.println("About me");
+        }
+    }
+
+    private void saveFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save BST Data");
+        fileChooser.setSelectedFile(new File("bst_data.txt")); // Tên file mặc định
+
+        int userChoice = fileChooser.showSaveDialog(null);
+
+        if (userChoice == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try (FileWriter writer = new FileWriter(selectedFile)) {
+                // Giả sử BSTTree có phương thức serialize() để chuyển cây thành chuỗi
+                String data = bstTree.serialize();
+                writer.write(data);
+                System.out.println("Đã lưu file thành công: " + selectedFile.getAbsolutePath());
+            } catch (IOException ex) {
+                System.err.println("Lỗi khi lưu file: " + ex.getMessage());
+            }
+        }
+    }
+
+    private void openFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Open BST Data");
+
+        int userChoice = fileChooser.showOpenDialog(null);
+
+        if (userChoice == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
+                StringBuilder content = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    content.append(line);
+                }
+
+                // Giả sử BSTTree có phương thức deserialize() để đọc dữ liệu
+                bstTree.deserialize(content.toString());
+                bstPanel.repaint(); // Vẽ lại cây BST
+                System.out.println("Đã mở file thành công: " + selectedFile.getName());
+
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, "File không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Lỗi đọc file!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Dữ liệu không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 }

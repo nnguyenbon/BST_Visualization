@@ -21,7 +21,7 @@ import javax.swing.Timer;
 
 /**
  *
- * @author CE191239 Nguyen Kim Bao Nguyen
+ * @author CE191239 Nguyen Kim Bao Nguyen, CE190173 Truong Khai Toan
  */
 public class BSTPanel extends JPanel {
     private final BSTTree bstTree;

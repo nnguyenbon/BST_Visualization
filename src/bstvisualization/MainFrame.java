@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author CE191239 Nguyen Kim Bao Nguyen
+ * @author CE191239 Nguyen Kim Bao Nguyen, CE190173 Truong Khai Toan
  */
 public class MainFrame extends JFrame {
     BSTTree bstTree = new BSTTree();

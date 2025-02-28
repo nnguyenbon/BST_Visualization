@@ -5,6 +5,10 @@
  */
 package bstvisualization;
 
+/**
+ *
+ * @author CE191239 Nguyen Kim Bao Nguyen, CE190173 Truong Khai Toan
+ */
 public class BSTNode {
 
     int data;

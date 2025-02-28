@@ -7,11 +7,11 @@ package bstvisualization;
 
 /**
  *
- * @author CE191239 Nguyen Kim Bao Nguyen
+ * @author CE191239 Nguyen Kim Bao Nguyen, CE190173 Truong Khai Toan
  */
 public class BstVisualization {
-    
-    //Window size
+
+    // Window size
     public static final int WINDOW_SIZE_X = 1000;
     public static final int WINDOW_SIZE_Y = 700;
 
@@ -21,5 +21,5 @@ public class BstVisualization {
     public static void main(String[] args) {
         MainFrame mainFrame = new MainFrame();
     }
-    
+
 }

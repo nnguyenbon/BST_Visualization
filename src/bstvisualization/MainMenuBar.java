@@ -23,7 +23,7 @@ import javax.swing.UIManager;
 
 /**
  *
- * @author CE191239 Nguyen Kim Bao Nguyen
+ * @author CE191239 Nguyen Kim Bao Nguyen, CE190173 Truong Khai Toan
  */
 public class MainMenuBar implements ActionListener {
 

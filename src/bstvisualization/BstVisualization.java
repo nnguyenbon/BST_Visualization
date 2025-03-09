@@ -10,10 +10,6 @@ package bstvisualization;
  * @author CE191239 Nguyen Kim Bao Nguyen
  */
 public class BstVisualization {
-    
-    //Window size
-    public static final int WINDOW_SIZE_X = 1000;
-    public static final int WINDOW_SIZE_Y = 700;
 
     /**
      * @param args the command line arguments
@@ -21,5 +17,18 @@ public class BstVisualization {
     public static void main(String[] args) {
         MainFrame mainFrame = new MainFrame();
     }
-    
+    /**
+     * 1 Người dùng nhập số vào textField và bấm "Add Node". 
+     * 2 Gọi handleAddNode(int data) trong ConfigurationPanel. 
+     * 3 Gọi addNode(int data) trong BSTTree để thêm nút vào cây.
+     * Nếu cây chưa có root, tạo root. Nếu cây đã có root, gọi insert(BSTNode
+     * currentNode, int data). 
+     * 4 Gọi insert(BSTNode currentNode, int data) trong BSTTree để chèn nút vào
+     * đúng vị trí. Xác định vị trí trái hoặc phải. Tính toán tọa độ (x, y) của 
+     * node mới. Gán node vào cây. 
+     * 5 Gọi bstPanel.repaint() để vẽ lại toàn bộ cây. 
+     * 6 Gọi paintComponent(Graphics g) trong BSTPanel để vẽ cây. 
+     * 7 Gọi drawTree(Graphics g, BSTNode node) để vẽ từng node. Vẽ đường nối 
+     * giữa các nút. Gọi drawNode(Graphics g) trong BSTNode để vẽ nút.
+     */
 }

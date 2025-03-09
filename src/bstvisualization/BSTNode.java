@@ -5,27 +5,36 @@
  */
 package bstvisualization;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+
 public class BSTNode {
 
     int data;
-    int size;
+    int x;
+    int y;
+    int size = 0;
     int level;
     int count;
     BSTNode left;
     BSTNode right;
     BSTNode parent;
-    
+
     public BSTNode() {
     }
 
-    public BSTNode(int data) {
+    public BSTNode(int data, int x, int y, int level) {
         this.data = data;
-        this.size = 1;
-        this.level = 0;
+        this.size = size++;
+        this.level = level;
         this.left = null;
         this.right = null;
         this.parent = null;
         this.count = 1;
+        this.x = x;
+        this.y = y;
     }
 
     public boolean isLeaf() {
@@ -167,7 +176,7 @@ public class BSTNode {
         int rightHeight = (right == null) ? 0 : right.getHeight();
         return Math.max(leftHeight, rightHeight) + 1;
     }
-    
+
     public boolean removeLeafChild(BSTNode node) {
         if (node == null) {
             return false;
@@ -179,7 +188,7 @@ public class BSTNode {
                     return true;
                 }
             }
-             if (this.hasRightChild()) { // check node is right child to remove
+            if (this.hasRightChild()) { // check node is right child to remove
                 if (this.right.data == node.data) {
                     this.setRight(null);
                     return true;
@@ -187,5 +196,26 @@ public class BSTNode {
             }
         }
         return false;
+    }
+
+    public void drawNode(Graphics g) {
+        int diameter = 40;
+
+        // Vẽ hình tròn màu trắng
+        g.setColor(Color.WHITE);
+        g.fillOval(x - diameter / 2, y - diameter / 2, diameter, diameter);
+
+        // Vẽ viền màu đen
+        g.setColor(Color.BLACK);
+        g.drawOval(x - diameter / 2, y - diameter / 2, diameter, diameter);
+
+        // Vẽ số bên trong
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 14));
+        String text = String.valueOf(data);
+        FontMetrics fm = g.getFontMetrics();
+        int textX = x - fm.stringWidth(text) / 2;
+        int textY = y + fm.getAscent() / 2;
+        g.drawString(text, textX, textY);
     }
 }

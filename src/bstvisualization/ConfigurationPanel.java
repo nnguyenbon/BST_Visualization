@@ -16,8 +16,10 @@ import java.util.function.Consumer;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -29,16 +31,32 @@ public class ConfigurationPanel extends JPanel {
     private JLabel errorLabel;
     private JTextField textField;
     private JTextField resultField;
+    private BSTTree tree;
+    private BSTPanel bstPanel;
+    public static boolean isFound;
+    public static boolean isSearched;
+    private MainFrame mainFrame;
 
-    public ConfigurationPanel() {
+    public ConfigurationPanel(BSTTree tree, BSTPanel bstPanel) {
+        this.tree = tree;
+        this.bstPanel = bstPanel;
+
         setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(1000, 200));
+        setPreferredSize(new Dimension(1000, 150));
         setBorder(createTitledBorder());
 
         // Tạo UI
         add(createInputPanel(), BorderLayout.NORTH);
         add(createResultPanel(), BorderLayout.CENTER);
         add(createErrorPanel(), BorderLayout.SOUTH);
+    }
+
+    public JTextField getResultField() {
+        return resultField;
+    }
+
+    public void setResultField(JTextField resultField) {
+        this.resultField = resultField;
     }
 
     private JPanel createInputPanel() {
@@ -102,29 +120,51 @@ public class ConfigurationPanel extends JPanel {
 
         return panel;
     }
-    
+
     private JPanel createResultPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         resultField = new JTextField(20);
-        resultField.setSize(200, 30);
+        resultField.setPreferredSize(new Dimension(200, 30));
+        resultField.setMinimumSize(new Dimension(200, 30));
+        resultField.setMaximumSize(new Dimension(200, 30));
         resultField.setFont(new Font("Arial", Font.PLAIN, 14));
         panel.add(resultField);
         return panel;
     }
 
+    private void resetResultField() {
+        resultField.setText("");
+    }
+
     private JPanel createErrorPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
         errorLabel = new JLabel(" ");
         errorLabel.setForeground(Color.RED);
+
+        // Đặt kích thước cố định cho errorLabel
+        errorLabel.setPreferredSize(new Dimension(200, 20));
+        errorLabel.setMinimumSize(new Dimension(200, 20));
+        errorLabel.setMaximumSize(new Dimension(200, 20));
+
         panel.add(errorLabel);
+
+        // Đặt kích thước cố định cho panel
+        panel.setPreferredSize(new Dimension(220, 30));
+        panel.setMinimumSize(new Dimension(220, 30));
+        panel.setMaximumSize(new Dimension(220, 30));
+
         return panel;
     }
 
     private JTextField createTextField() {
         JTextField field = new JTextField(20);
-        field.setPreferredSize(new Dimension(200, 30));
         field.setFont(new Font("Arial", Font.PLAIN, 14));
         return field;
+    }
+
+    private void resetTextField() {
+        textField.setText("");
     }
 
     private JButton createButton(String text, ActionListener action) {
@@ -161,15 +201,18 @@ public class ConfigurationPanel extends JPanel {
     }
 
     private int validInput() {
-        String input = textField.getText().trim();
-        String regex = "[0-9]+";
+        if (textField == null) {
+            System.out.println("textField is null!");
+            return -1;
+        }
 
+        String input = textField.getText().trim();
         if (input.isEmpty()) {
             showError("Input is empty!");
             return -1;
         }
 
-        if (!input.matches(regex)) {
+        if (!input.matches("[0-9]+")) {
             showError("Only enter a positive number!");
             return -1;
         }
@@ -178,33 +221,158 @@ public class ConfigurationPanel extends JPanel {
         return Integer.parseInt(input);
     }
 
-    private void showError(String message) {
+    public void showError(String message) {
         if (errorLabel != null) {
             errorLabel.setText(message);
-            textField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
         }
     }
 
     private void resetError() {
         if (errorLabel != null) {
             errorLabel.setText(" ");
-            textField.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         }
     }
 
-    private void handleAddNode(int data) {
-        System.out.println("Adding node: " + data);
+    public void resetFunction() {
+        resetTextField();
+        resetError();
+        resetResultField();
+        tree.resetResult();
+    }
+
+    //Dang loi
+    public void handleAddNode(int data) {
+        resetFunction();
+        tree.addNode(data);
+        if (tree.cannotAdd) {
+            showError(tree.getResult());
+        }
+        bstPanel.repaint();
     }
 
     private void handleRandomNode() {
-        System.out.println("Random node: ");
+        resetFunction();
+        int randomData = (int) (Math.random() * 101);
+        handleAddNode(randomData);
+        resultField.setText(String.valueOf(randomData));
     }
 
     private void handleSearchNode(int data) {
-        System.out.println("Searching node: " + data);
+        if (tree.isEmpty()) {
+            showError("Add data first");
+            return;
+        }
+        resetFunction();
+        tree.findNode(data);
+
+        bstPanel.repaint();
+        resultField.setText(tree.getResult());
     }
 
     private void handleRemoveNode(int data) {
-        System.out.println("Removing node: " + data);
+        if (tree.isEmpty()) {
+            showError("Add data first");
+            return;
+        }
+        resetFunction();
+        tree.findNode(data);
+
+        if (isSearched) {
+            int choice = JOptionPane.showOptionDialog(bstPanel, "Do you want to remove " + data + " ?",
+                    "Remove cofirmation", JOptionPane.YES_NO_OPTION, JOptionPane.CLOSED_OPTION,
+                    null, null, JOptionPane.YES_OPTION);
+
+            if (choice == JOptionPane.YES_OPTION) {
+                tree.removeNode(data);
+                resultField.setText("Remove Succesfully");
+            }
+        } else {
+            resultField.setText("Data is not exist");
+        }
+
+        isSearched = false;
+        bstPanel.repaint();
+    }
+
+    public void preOrderResult() {
+        if (tree.isEmpty()) {
+            showError("Add data first");
+            return;
+        }
+        tree.preOrder();
+        resultField.setText(tree.getResult());
+        bstPanel.repaint();
+    }
+
+    public void postOrderResult() {
+        if (tree.isEmpty()) {
+            showError("Add data first");
+            return;
+        }
+        tree.postOrder();
+        resultField.setText(tree.getResult());
+        bstPanel.repaint();
+    }
+
+    public void inOrderResult() {
+        if (tree.isEmpty()) {
+            showError("Add data first");
+            return;
+        }
+        tree.inOrder();
+        resultField.setText(tree.getResult());
+        bstPanel.repaint();
+    }
+
+    public void bfsResult() {
+        if (tree.isEmpty()) {
+            showError("Add data first");
+            return;
+        }
+        tree.BFS();
+        resultField.setText(tree.getResult());
+        bstPanel.repaint();
+    }
+
+    public void findMax() {
+        if (tree.isEmpty()) {
+            showError("Add data first");
+            return;
+        }
+        isFound = true;
+        tree.setResult(String.valueOf(tree.root.findMax().data));
+        resultField.setText(tree.getResult());
+        bstPanel.repaint();
+    }
+
+    public void findMin() {
+        if (tree.isEmpty()) {
+            showError("Add data first");
+            return;
+        }
+        isFound = true;
+        tree.setResult(String.valueOf(tree.root.findMin().data));
+        resultField.setText(tree.getResult());
+        bstPanel.repaint();
+    }
+
+    public void clearTree() {
+        if (tree.isEmpty()) {
+            showError("Tree is already empty");
+            return;
+        }
+
+        tree.deleteTree();
+        bstPanel.repaint();
+    }
+
+    public void balanceTree() {
+        if (tree.isEmpty()) {
+            showError("Tree is already empty");
+            return;
+        }
+
+        tree.balanceTree();
+        bstPanel.repaint();
     }
 }

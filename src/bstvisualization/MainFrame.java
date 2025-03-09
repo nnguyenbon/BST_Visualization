@@ -13,16 +13,26 @@ import javax.swing.JFrame;
  * @author CE191239 Nguyen Kim Bao Nguyen
  */
 public class MainFrame extends JFrame {
-    MainMenuBar mainMenu = new MainMenuBar();
+
+    //Window size
+    public static final int WINDOW_SIZE_X = 1600;
+    public static final int WINDOW_SIZE_Y = 700;
 
     public MainFrame() {
         setTitle("BST Visualizer");
-        setSize(BstVisualization.WINDOW_SIZE_X, BstVisualization.WINDOW_SIZE_Y);  
-        setLocationRelativeTo(null);  
+        setSize(WINDOW_SIZE_X, WINDOW_SIZE_Y);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setJMenuBar(mainMenu.getMenuBar()); 
-        add(new ConfigurationPanel(), BorderLayout.NORTH); 
-        add(new BSTPanel(), BorderLayout.SOUTH);
+
+        BSTTree tree = new BSTTree(BSTPanel.bstPanelWidth, BSTPanel.bstPanelHeight);
+        BSTPanel bstPanel = new BSTPanel(tree);
+        
+        ConfigurationPanel configPanel = new ConfigurationPanel(tree, bstPanel);
+        MainMenuBar menuBar = new MainMenuBar(tree, configPanel);
+        setJMenuBar(menuBar);
+
+        add(configPanel, BorderLayout.NORTH);
+        add(bstPanel, BorderLayout.CENTER);
         setVisible(true);
     }
 }

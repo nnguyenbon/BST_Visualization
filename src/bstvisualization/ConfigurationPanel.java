@@ -12,6 +12,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.function.Consumer;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -64,6 +66,25 @@ public class ConfigurationPanel extends JPanel {
 
         textField = createTextField();
         panel.add(textField);
+        
+        textField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    handleAction(data -> handleAddNode(data));
+                }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+               
+            }
+        });
 
         JButton addButton = createButton("Add Node", new ActionListener() {
             @Override
@@ -143,16 +164,16 @@ public class ConfigurationPanel extends JPanel {
         errorLabel.setForeground(Color.RED);
 
         // Đặt kích thước cố định cho errorLabel
-        errorLabel.setPreferredSize(new Dimension(200, 20));
-        errorLabel.setMinimumSize(new Dimension(200, 20));
-        errorLabel.setMaximumSize(new Dimension(200, 20));
+        errorLabel.setPreferredSize(new Dimension(700, 20));
+        errorLabel.setMinimumSize(new Dimension(700, 20));
+        errorLabel.setMaximumSize(new Dimension(700, 20));
 
         panel.add(errorLabel);
 
         // Đặt kích thước cố định cho panel
-        panel.setPreferredSize(new Dimension(220, 30));
-        panel.setMinimumSize(new Dimension(220, 30));
-        panel.setMaximumSize(new Dimension(220, 30));
+        panel.setPreferredSize(new Dimension(720, 30));
+        panel.setMinimumSize(new Dimension(720, 30));
+        panel.setMaximumSize(new Dimension(720, 30));
 
         return panel;
     }
@@ -193,6 +214,8 @@ public class ConfigurationPanel extends JPanel {
         int data = validInput();
         if (data != -1) {
             action.accept(data);
+        } else {
+            resetTextField();
         }
     }
 
@@ -213,7 +236,7 @@ public class ConfigurationPanel extends JPanel {
         }
 
         if (!input.matches("[0-9]+")) {
-            showError("Only enter a positive number!");
+            showError("\"" + input + "\" Only enter a positive number!");
             return -1;
         }
 

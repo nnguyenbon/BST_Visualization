@@ -12,7 +12,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.Random;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -133,7 +134,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
     }
 
     public void openFile() {
-        File parentDirectory = new File("").getAbsoluteFile().getParentFile();
+        File parentDirectory = new File("").getAbsoluteFile();
 
         JFileChooser fileChooser = new JFileChooser(parentDirectory);
         fileChooser.setFileFilter(new FileNameExtensionFilter("Text Files (*.txt)", "txt"));
@@ -184,19 +185,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
                 throw new Exception("BST is empty");
             }
 
-            String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            int len = 8;
-
-            Random random = new Random();
-            StringBuilder sb = new StringBuilder(len);
-            sb.append("tree_");
-
-            for (int i = 0; i < len; i++) {
-                int index = random.nextInt(CHARACTERS.length());
-                sb.append(CHARACTERS.charAt(index));
-            }
-
-            sb.append(".txt");
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss");
+            String formattedDate = now.format(formatter);
+            StringBuilder sb = new StringBuilder();
+            sb.append("tree_").append(formattedDate).append(".txt");
 
             File file = new File(sb.toString());
 
@@ -204,12 +197,12 @@ public class MainMenuBar extends JMenuBar implements ActionListener {
                 out.write(tree.countNodes() + "\n");
                 tree.setResult("");
                 tree.BFS();
-                
+
                 String treeStructure = tree.getResult();
                 treeStructure = treeStructure.replaceAll("->", " ");
-                System.out.println("result: " + treeStructure);
 
                 out.write(treeStructure + "\n");
+                confi.showError("Tree is saving at file " + file.getPath());
             }
         } catch (IOException e) {
             confi.showError("File write error: " + e.getMessage());
